@@ -1,0 +1,58 @@
+// index.js
+import { createFrames } from '@neynar/nodejs-sdk';
+import express from 'express';
+import { ethers } from 'ethers';
+
+const app = express();
+const frames = createFrames();
+
+// NFT Contract ABI (simplified)
+const CONTRACT_ABI = [
+  "function mintTeamNFT(address to, string[] memory players, uint256[] memory buildScores)"
+];
+
+const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS";
+const PRIVATE_KEY = "YOUR_PRIVATE_KEY";
+
+app.get('/api/frame', async (req, res) => {
+  const { fid } = req.query;
+  
+  const frame = frames.create({
+    buttons: [
+      {
+        label: 'Start Building Team',
+        action: 'post',
+        target: '/api/start'
+      }
+    ],
+    image: {
+      src: '/api/placeholder/600/400',
+      aspectRatio: '3:2'
+    },
+    postUrl: `${process.env.HOST}/api/frame`
+  });
+
+  res.send(frame);
+});
+
+app.post('/api/mint-team', async (req, res) => {
+  const { players, buildScores } = req.body;
+  
+  try {
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
+    
+    const tx = await contract.mintTeamNFT(req.body.address, players, buildScores);
+    await tx.wait();
+    
+    res.json({ success: true, txHash: tx.hash });
+  } catch (error) {
+    console.error('Error minting NFT:', error);
+    res.status(500).json({ error: 'Failed to mint NFT' });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Frame server running on port 3000');
+});
