@@ -1,0 +1,131 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <!-- Main Background -->
+    <rect width="1200" height="800" fill="#111827"/>
+    
+    <!-- App Header -->
+    <rect x="0" y="0" width="1200" height="64" fill="#1f2937"/>
+    <text x="40" y="42" fill="white" font-family="Arial" font-size="24" font-weight="bold">⚽ Farcaster Fantasy Football</text>
+    
+    <!-- Main Content Area -->
+    <g transform="translate(32, 96)">
+        <!-- Left Sidebar - Player Selection -->
+        <rect x="0" y="0" width="320" height="640" rx="12" fill="#1f2937"/>
+        <text x="24" y="40" fill="white" font-family="Arial" font-size="18">Select Players</text>
+        
+        <!-- Player Cards -->
+        <g transform="translate(16, 64)">
+            <!-- Player Card 1 -->
+            <rect x="0" y="0" width="288" height="80" rx="8" fill="#374151"/>
+            <circle cx="40" cy="40" r="24" fill="#4b5563"/>
+            <text x="80" y="32" fill="white" font-family="Arial" font-size="16">@vitalik</text>
+            <text x="80" y="56" fill="#9ca3af" font-family="Arial" font-size="14">Build Score: 94.2</text>
+            <rect x="200" y="28" width="64" height="32" rx="16" fill="#3b82f6"/>
+            <text x="218" y="48" fill="white" font-family="Arial" font-size="14">Add</text>
+        </g>
+        
+        <!-- Player Card 2 -->
+        <g transform="translate(16, 156)">
+            <rect x="0" y="0" width="288" height="80" rx="8" fill="#374151"/>
+            <circle cx="40" cy="40" r="24" fill="#4b5563"/>
+            <text x="80" y="32" fill="white" font-family="Arial" font-size="16">@dwr</text>
+            <text x="80" y="56" fill="#9ca3af" font-family="Arial" font-size="14">Build Score: 88.7</text>
+            <rect x="200" y="28" width="64" height="32" rx="16" fill="#3b82f6"/>
+            <text x="218" y="48" fill="white" font-family="Arial" font-size="14">Add</text>
+        </g>
+        
+        <!-- More Player Cards... -->
+        
+        <!-- Main Content - Football Field -->
+        <g transform="translate(352, 0)">
+            <!-- Field Container -->
+            <rect x="0" y="0" width="784" height="640" rx="12" fill="#1f2937"/>
+            
+            <!-- Formation Selector -->
+            <g transform="translate(24, 24)">
+                <text x="0" y="24" fill="white" font-family="Arial" font-size="18">Formation</text>
+                <rect x="120" y="4" width="80" height="32" rx="16" fill="#3b82f6"/>
+                <text x="140" y="24" fill="white" font-family="Arial" font-size="14">4-3-3</text>
+                <rect x="216" y="4" width="80" height="32" rx="16" fill="#4b5563"/>
+                <text x="236" y="24" fill="white" font-family="Arial" font-size="14">4-4-2</text>
+            </g>
+            
+            <!-- Football Field -->
+            <g transform="translate(24, 80)">
+                <!-- Field Background -->
+                <rect x="0" y="0" width="736" height="480" rx="8" fill="#15803d"/>
+                
+                <!-- Field Lines -->
+                <line x1="368" y1="0" x2="368" y2="480" stroke="white" stroke-width="2"/>
+                <circle cx="368" cy="240" r="60" stroke="white" stroke-width="2" fill="none"/>
+                
+                <!-- Goal Areas -->
+                <rect x="0" y="160" width="80" height="160" stroke="white" stroke-width="2" fill="none"/>
+                <rect x="656" y="160" width="80" height="160" stroke="white" stroke-width="2" fill="none"/>
+                
+                <!-- Players on Field -->
+                <!-- Goalkeeper -->
+                <g transform="translate(40, 240)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">GK</text>
+                </g>
+                
+                <!-- Defenders -->
+                <g transform="translate(160, 120)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">LB</text>
+                </g>
+                <g transform="translate(160, 240)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CB</text>
+                </g>
+                <g transform="translate(160, 360)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">RB</text>
+                </g>
+                
+                <!-- Midfielders -->
+                <g transform="translate(368, 160)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
+                </g>
+                <g transform="translate(368, 240)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
+                </g>
+                <g transform="translate(368, 320)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
+                </g>
+                
+                <!-- Forwards -->
+                <g transform="translate(576, 160)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">LW</text>
+                </g>
+                <g transform="translate(576, 240)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">ST</text>
+                </g>
+                <g transform="translate(576, 320)">
+                    <circle r="24" fill="#3b82f6"/>
+                    <text x="0" y="6" fill="white" font-family="Arial" font-size="12" text-anchor="middle">RW</text>
+                </g>
+            </g>
+            
+            <!-- Team Stats -->
+            <g transform="translate(24, 584)">
+                <text x="0" y="0" fill="white" font-family="Arial" font-size="16">Team Build Score: 89.5</text>
+                <text x="240" y="0" fill="white" font-family="Arial" font-size="16">Players: 11/20</text>
+            </g>
+        </g>
+    </g>
+    
+    <!-- Bottom Actions -->
+    <g transform="translate(32, 752)">
+        <rect x="0" y="0" width="160" height="40" rx="20" fill="#3b82f6"/>
+        <text x="40" y="26" fill="white" font-family="Arial" font-size="16">Save Team</text>
+        
+        <rect x="176" y="0" width="160" height="40" rx="20" fill="#059669"/>
+        <text x="216" y="26" fill="white" font-family="Arial" font-size="16">Mint NFT</text>
+    </g>
+</svg>
