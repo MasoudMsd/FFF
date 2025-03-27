@@ -1,127 +1,96 @@
 <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
     <!-- Background -->
-    <rect width="1200" height="800" fill="#f8fafc"/>
-    
+    <rect width="1200" height="800" fill="#f8fafc" />
+
     <!-- Header -->
-    <rect x="0" y="0" width="1200" height="60" fill="#1e293b"/>
+    <rect x="0" y="0" width="1200" height="60" fill="#1e293b" />
     <text x="30" y="38" fill="white" font-family="Arial" font-size="24" font-weight="bold">Farcaster Fantasy Football</text>
-    
+
     <!-- Main Content Container -->
     <g transform="translate(20, 80)">
         <!-- Left Panel - Team Selection -->
-        <rect x="0" y="0" width="350" height="680" fill="white" stroke="#e2e8f0" stroke-width="2" rx="8"/>
+        <rect x="0" y="0" width="350" height="680" fill="white" stroke="#e2e8f0" stroke-width="2" rx="8" />
         <text x="20" y="40" fill="#1e293b" font-family="Arial" font-size="20" font-weight="bold">Select Players</text>
-        
+
         <!-- Player List -->
         <g transform="translate(10, 60)">
-            <!-- Player Item Template -->
-            <g>
-                <rect x="10" y="10" width="320" height="60" fill="#f8fafc" rx="4"/>
-                <circle cx="40" cy="40" r="20" fill="#cbd5e1"/>
-                <text x="80" y="35" fill="#1e293b" font-family="Arial" font-size="16">@player1</text>
-                <text x="80" y="55" fill="#64748b" font-family="Arial" font-size="14">Build Score: 85.5</text>
-                <rect x="240" y="25" width="70" height="30" fill="#2563eb" rx="4"/>
+            <!-- Reusable Player Item Template -->
+            <g id="player-template">
+                <rect x="10" y="10" width="320" height="60" fill="#f8fafc" rx="4" />
+                <circle cx="40" cy="40" r="20" fill="#cbd5e1" />
+                <text x="80" y="35" fill="#1e293b" font-family="Arial" font-size="16">@player</text>
+                <text x="80" y="55" fill="#64748b" font-family="Arial" font-size="14">Build Score: 0.0</text>
+                <rect x="240" y="25" width="70" height="30" fill="#2563eb" rx="4" />
                 <text x="255" y="45" fill="white" font-family="Arial" font-size="14">Add</text>
             </g>
-            
-            <!-- More player items (duplicated and translated) -->
-            <g transform="translate(0, 70)">
-                <rect x="10" y="10" width="320" height="60" fill="#f8fafc" rx="4"/>
-                <circle cx="40" cy="40" r="20" fill="#cbd5e1"/>
-                <text x="80" y="35" fill="#1e293b" font-family="Arial" font-size="16">@player2</text>
-                <text x="80" y="55" fill="#64748b" font-family="Arial" font-size="14">Build Score: 92.3</text>
-                <rect x="240" y="25" width="70" height="30" fill="#2563eb" rx="4"/>
-                <text x="255" y="45" fill="white" font-family="Arial" font-size="14">Add</text>
-            </g>
+
+            <!-- Render Multiple Players -->
+            <use href="#player-template" transform="translate(0, 70)" />
+            <use href="#player-template" transform="translate(0, 140)" />
+            <use href="#player-template" transform="translate(0, 210)" />
         </g>
-        
+
         <!-- Right Panel - Football Field -->
         <g transform="translate(370, 0)">
-            <rect x="0" y="0" width="790" height="680" fill="white" stroke="#e2e8f0" stroke-width="2" rx="8"/>
-            
+            <rect x="0" y="0" width="790" height="680" fill="white" stroke="#e2e8f0" stroke-width="2" rx="8" />
+
             <!-- Formation Selector -->
             <text x="20" y="40" fill="#1e293b" font-family="Arial" font-size="20" font-weight="bold">Team Formation</text>
             <g transform="translate(20, 60)">
-                <rect x="0" y="0" width="100" height="40" fill="#2563eb" rx="4"/>
+                <rect x="0" y="0" width="100" height="40" fill="#2563eb" rx="4" />
                 <text x="25" y="25" fill="white" font-family="Arial" font-size="16">4-3-3</text>
-                <rect x="120" y="0" width="100" height="40" fill="#e2e8f0" rx="4"/>
+                <rect x="120" y="0" width="100" height="40" fill="#e2e8f0" rx="4" />
                 <text x="145" y="25" fill="#1e293b" font-family="Arial" font-size="16">4-4-2</text>
             </g>
-            
+
             <!-- Football Field -->
             <g transform="translate(20, 120)">
                 <!-- Field Background -->
-                <rect x="0" y="0" width="750" height="500" fill="#15803d" rx="8"/>
-                
-                <!-- Field Lines -->
-                <rect x="0" y="0" width="750" height="500" fill="none" stroke="white" stroke-width="2" rx="8"/>
-                <line x1="375" y1="0" x2="375" y2="500" stroke="white" stroke-width="2"/>
-                <circle cx="375" cy="250" r="50" fill="none" stroke="white" stroke-width="2"/>
-                
+                <rect x="0" y="0" width="750" height="500" fill="#15803d" rx="8" />
+                <rect x="0" y="0" width="750" height="500" fill="none" stroke="white" stroke-width="2" rx="8" />
+                <line x1="375" y1="0" x2="375" y2="500" stroke="white" stroke-width="2" />
+                <circle cx="375" cy="250" r="50" fill="none" stroke="white" stroke-width="2" />
+
                 <!-- Penalty Areas -->
-                <rect x="0" y="150" width="100" height="200" fill="none" stroke="white" stroke-width="2"/>
-                <rect x="650" y="150" width="100" height="200" fill="none" stroke="white" stroke-width="2"/>
-                
+                <rect x="0" y="150" width="100" height="200" fill="none" stroke="white" stroke-width="2" />
+                <rect x="650" y="150" width="100" height="200" fill="none" stroke="white" stroke-width="2" />
+
                 <!-- Players on Field (4-3-3 Formation) -->
+                <g id="player-on-field">
+                    <circle r="20" fill="#3b82f6" />
+                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30" />
+                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">POS</text>
+                </g>
+
                 <!-- Goalkeeper -->
-                <g transform="translate(50, 250)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">GK</text>
-                </g>
-                
+                <use href="#player-on-field" transform="translate(50, 250)" />
+                <text x="50" y="285" fill="white" font-family="Arial" font-size="12" text-anchor="middle">GK</text>
+
                 <!-- Defenders -->
-                <g transform="translate(150, 125)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">LB</text>
-                </g>
-                <g transform="translate(150, 250)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CB</text>
-                </g>
-                <g transform="translate(150, 375)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">RB</text>
-                </g>
-                
+                <use href="#player-on-field" transform="translate(150, 125)" />
+                <text x="150" y="160" fill="white" font-family="Arial" font-size="12" text-anchor="middle">LB</text>
+                <use href="#player-on-field" transform="translate(150, 250)" />
+                <text x="150" y="285" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CB</text>
+                <use href="#player-on-field" transform="translate(150, 375)" />
+                <text x="150" y="410" fill="white" font-family="Arial" font-size="12" text-anchor="middle">RB</text>
+
                 <!-- Midfielders -->
-                <g transform="translate(375, 175)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
-                </g>
-                <g transform="translate(375, 250)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
-                </g>
-                <g transform="translate(375, 325)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
-                </g>
-                
+                <use href="#player-on-field" transform="translate(375, 175)" />
+                <text x="375" y="210" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
+                <use href="#player-on-field" transform="translate(375, 250)" />
+                <text x="375" y="285" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
+                <use href="#player-on-field" transform="translate(375, 325)" />
+                <text x="375" y="360" fill="white" font-family="Arial" font-size="12" text-anchor="middle">CM</text>
+
                 <!-- Forwards -->
-                <g transform="translate(600, 175)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">LW</text>
-                </g>
-                <g transform="translate(600, 250)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">ST</text>
-                </g>
-                <g transform="translate(600, 325)">
-                    <circle r="20" fill="#3b82f6"/>
-                    <image x="-15" y="-15" width="30" height="30" href="/api/placeholder/30/30"/>
-                    <text x="0" y="35" fill="white" font-family="Arial" font-size="12" text-anchor="middle">RW</text>
-                </g>
+                <use href="#player-on-field" transform="translate(600, 175)" />
+                <text x="600" y="210" fill="white" font-family="Arial" font-size="12" text-anchor="middle">LW</text>
+                <use href="#player-on-field" transform="translate(600, 250)" />
+                <text x="600" y="285" fill="white" font-family="Arial" font-size="12" text-anchor="middle">ST</text>
+                <use href="#player-on-field" transform="translate(600, 325)" />
+                <text x="600" y="360" fill="white" font-family="Arial" font-size="12" text-anchor="middle">RW</text>
             </g>
-            
+
             <!-- Team Stats -->
             <g transform="translate(20, 640)">
                 <text x="0" y="0" fill="#1e293b" font-family="Arial" font-size="16">Team Build Score: 87.5</text>
@@ -129,13 +98,13 @@
             </g>
         </g>
     </g>
-    
+
     <!-- Footer Actions -->
     <g transform="translate(20, 780)">
-        <rect x="0" y="0" width="150" height="40" fill="#2563eb" rx="4"/>
+        <rect x="0" y="0" width="150" height="40" fill="#2563eb" rx="4" />
         <text x="45" y="25" fill="white" font-family="Arial" font-size="16">Save Team</text>
-        
-        <rect x="170" y="0" width="150" height="40" fill="#059669" rx="4"/>
+
+        <rect x="170" y="0" width="150" height="40" fill="#059669" rx="4" />
         <text x="200" y="25" fill="white" font-family="Arial" font-size="16">Mint NFT</text>
     </g>
 </svg>
