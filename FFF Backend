@@ -6,46 +6,66 @@ import { ethers } from 'ethers';
 const app = express();
 const frames = createFrames();
 
-// NFT Contract ABI (simplified)
+// Environment variables
 const CONTRACT_ABI = [
   "function mintTeamNFT(address to, string[] memory players, uint256[] memory buildScores)"
 ];
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS; // Use environment variables for sensitive data
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const RPC_URL = process.env.RPC_URL;
 
-const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS";
-const PRIVATE_KEY = "YOUR_PRIVATE_KEY";
+// Middleware to parse JSON bodies
+app.use(express.json());
 
+// Route to serve the initial frame
 app.get('/api/frame', async (req, res) => {
   const { fid } = req.query;
-  
-  const frame = frames.create({
-    buttons: [
-      {
-        label: 'Start Building Team',
-        action: 'post',
-        target: '/api/start'
-      }
-    ],
-    image: {
-      src: '/api/placeholder/600/400',
-      aspectRatio: '3:2'
-    },
-    postUrl: `${process.env.HOST}/api/frame`
-  });
 
-  res.send(frame);
+  if (!fid) {
+    return res.status(400).json({ error: 'Missing fid parameter' });
+  }
+
+  try {
+    const frame = frames.create({
+      buttons: [
+        {
+          label: 'Start Building Team',
+          action: 'post',
+          target: '/api/start'
+        }
+      ],
+      image: {
+        src: '/api/placeholder/600/400',
+        aspectRatio: '3:2'
+      },
+      postUrl: `${process.env.HOST}/api/frame`
+    });
+
+    res.send(frame);
+  } catch (error) {
+    console.error('Error creating frame:', error);
+    res.status(500).json({ error: 'Failed to create frame' });
+  }
 });
 
+// Route to mint NFTs
 app.post('/api/mint-team', async (req, res) => {
-  const { players, buildScores } = req.body;
-  
+  const { address, players, buildScores } = req.body;
+
+  // Validate required fields
+  if (!address || !players || !buildScores) {
+    return res.status(400).json({ error: 'Missing required fields: address, players, or buildScores' });
+  }
+
   try {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
     const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
-    
-    const tx = await contract.mintTeamNFT(req.body.address, players, buildScores);
-    await tx.wait();
-    
+
+    // Mint the NFT
+    const tx = await contract.mintTeamNFT(address, players, buildScores);
+    await tx.wait(); // Wait for transaction confirmation
+
     res.json({ success: true, txHash: tx.hash });
   } catch (error) {
     console.error('Error minting NFT:', error);
@@ -53,6 +73,8 @@ app.post('/api/mint-team', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Frame server running on port 3000');
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Frame server running on port ${PORT}`);
 });
