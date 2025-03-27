@@ -3,7 +3,8 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, Users, Football, Trophy } from 'lucide-react';
 
-const TALENT_API_KEY = 'API KEY';
+// Constants
+const TALENT_API_KEY = process.env.NEXT_PUBLIC_TALENT_API_KEY || 'API_KEY'; // Use environment variables
 const TALENT_API_URL = 'https://api.talentprotocol.com/v1';
 
 const PlayerPosition = {
@@ -34,25 +35,32 @@ const TeamBuilder = () => {
   const [formation, setFormation] = useState('4-3-3');
   const [step, setStep] = useState(1);
 
-  // Mock function to get Farcaster friends
-  const getFarcasterFriends = async () => {
-    // This would be replaced with actual Farcaster API call
-    const mockFriends = [
-      { id: 1, username: 'user1', avatar: '/api/placeholder/50/50' },
-      { id: 2, username: 'user2', avatar: '/api/placeholder/50/50' },
-      // ... more friends
-    ];
-    setFriends(mockFriends);
-  };
+  // Fetch friends (mock API call)
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        // Replace with actual API call
+        const mockFriends = [
+          { id: 1, username: 'user1', avatar: '/api/placeholder/50/50' },
+          { id: 2, username: 'user2', avatar: '/api/placeholder/50/50' },
+          { id: 3, username: 'user3', avatar: '/api/placeholder/50/50' }
+        ];
+        setFriends(mockFriends);
+      } catch (error) {
+        console.error('Error fetching friends:', error);
+      }
+    };
 
-  // Get Build Score from Talent Protocol
+    fetchFriends();
+  }, []);
+
+  // Fetch Build Score from Talent Protocol
   const getBuildScore = async (address) => {
     try {
       const response = await fetch(`${TALENT_API_URL}/talent-passports/${address}`, {
-        headers: {
-          'Authorization': `Bearer ${TALENT_API_KEY}`
-        }
+        headers: { Authorization: `Bearer ${TALENT_API_KEY}` }
       });
+      if (!response.ok) throw new Error('Failed to fetch build score');
       const data = await response.json();
       return data.build_score || Math.random() * 100; // Fallback for demo
     } catch (error) {
@@ -61,6 +69,7 @@ const TeamBuilder = () => {
     }
   };
 
+  // Add a player to the team
   const addPlayer = async (friend, position) => {
     if (selectedPlayers.length >= 20) {
       alert('Maximum team size reached (20 players)');
@@ -68,50 +77,16 @@ const TeamBuilder = () => {
     }
 
     const buildScore = await getBuildScore(friend.address);
-    setSelectedPlayers([...selectedPlayers, {
-      ...friend,
-      position,
-      buildScore
-    }]);
+    setSelectedPlayers((prevPlayers) => [...prevPlayers, { ...friend, position, buildScore }]);
   };
 
-  const renderFootballField = () => {
-    return (
-      <div className="relative w-full h-96 bg-green-600 rounded-lg p-4">
-        {/* Field markings */}
-        <div className="absolute inset-0 border-2 border-white rounded-lg">
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white transform -translate-x-1/2" />
-          <div className="absolute top-1/2 left-0 right-0 h-px bg-white transform -translate-y-1/2" />
-          <div className="absolute w-32 h-32 left-1/2 top-1/2 border-2 border-white rounded-full transform -translate-x-1/2 -translate-y-1/2" />
-        </div>
-        
-        {/* Players */}
-        {selectedPlayers.slice(0, 11).map((player, index) => (
-          <div
-            key={player.id}
-            className="absolute transform -translate-x-1/2 -translate-y-1/2"
-            style={{
-              left: `${getPlayerPosition(index, formation).x}%`,
-              top: `${getPlayerPosition(index, formation).y}%`
-            }}
-          >
-            <div className="flex flex-col items-center">
-              <img
-                src={player.avatar}
-                alt={player.username}
-                className="w-8 h-8 rounded-full border-2 border-white"
-              />
-              <span className="text-white text-xs mt-1">{player.username}</span>
-              <span className="text-white text-xs">{player.buildScore.toFixed(1)}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
+  // Remove a player from the team
+  const removePlayer = (id) => {
+    setSelectedPlayers((prevPlayers) => prevPlayers.filter((player) => player.id !== id));
   };
 
+  // Calculate player positions based on formation
   const getPlayerPosition = (index, formation) => {
-    // Calculate player positions based on formation
     const positions = {
       '4-3-3': [
         { x: 50, y: 90 }, // GK
@@ -125,107 +100,41 @@ const TeamBuilder = () => {
         { x: 20, y: 30 }, // LW
         { x: 50, y: 20 }, // ST
         { x: 80, y: 30 }  // RW
+      ],
+      '4-4-2': [
+        { x: 50, y: 90 }, // GK
+        { x: 20, y: 70 }, // LB
+        { x: 40, y: 70 }, // CB
+        { x: 60, y: 70 }, // CB
+        { x: 80, y: 70 }, // RB
+        { x: 20, y: 50 }, // LM
+        { x: 40, y: 50 }, // CM
+        { x: 60, y: 50 }, // CM
+        { x: 80, y: 50 }, // RM
+        { x: 35, y: 30 }, // ST
+        { x: 65, y: 30 }  // ST
+      ],
+      '3-5-2': [
+        { x: 50, y: 90 }, // GK
+        { x: 30, y: 70 }, // CB
+        { x: 50, y: 70 }, // CB
+        { x: 70, y: 70 }, // CB
+        { x: 20, y: 50 }, // LM
+        { x: 40, y: 50 }, // CM
+        { x: 60, y: 50 }, // CM
+        { x: 80, y: 50 }, // RM
+        { x: 35, y: 30 }, // ST
+        { x: 65, y: 30 }  // ST
       ]
     };
     return positions[formation][index] || { x: 50, y: 50 };
   };
 
-  return (
-    <Card className="w-full max-w-4xl">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <h2 className="text-2xl font-bold">Farcaster Fantasy Football</h2>
-        <div className="flex space-x-2">
-          <Users className="w-6 h-6" />
-          <span>{selectedPlayers.length}/20 Players</span>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {step === 1 && (
-          <div className="space-y-4">
-            <h3 className="text-xl">Step 1: Select Your Formation</h3>
-            <div className="flex space-x-2">
-              {['4-3-3', '4-4-2', '3-5-2'].map(f => (
-                <Button
-                  key={f}
-                  onClick={() => setFormation(f)}
-                  variant={formation === f ? 'default' : 'outline'}
-                >
-                  {f}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-4">
-            <h3 className="text-xl">Step 2: Select Players</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {/* Friends list */}
-              <div className="border rounded p-4">
-                <h4 className="font-bold mb-2">Available Friends</h4>
-                {friends.map(friend => (
-                  <div key={friend.id} className="flex items-center justify-between p-2">
-                    <div className="flex items-center">
-                      <img
-                        src={friend.avatar}
-                        alt={friend.username}
-                        className="w-8 h-8 rounded-full mr-2"
-                      />
-                      <span>{friend.username}</span>
-                    </div>
-                    <Button
-                      onClick={() => addPlayer(friend, PlayerPosition.CENTER_MID)}
-                      disabled={selectedPlayers.length >= 20}
-                    >
-                      Add
-                    </Button>
-                  </div>
-                ))}
-              </div>
-
-              {/* Team preview */}
-              <div className="border rounded p-4">
-                <h4 className="font-bold mb-2">Your Team</h4>
-                {renderFootballField()}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {step === 3 && (
-          <div className="space-y-4">
-            <h3 className="text-xl">Step 3: Confirm Team</h3>
-            <div className="text-center">
-              <Button
-                onClick={() => {
-                  // Here we would mint the NFT with the team data
-                  alert('Team NFT minted successfully!');
-                }}
-              >
-                Mint Team NFT
-              </Button>
-            </div>
-          </div>
-        )}
-
-        <div className="flex justify-between mt-4">
-          <Button
-            onClick={() => setStep(Math.max(1, step - 1))}
-            disabled={step === 1}
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={() => setStep(Math.min(3, step + 1))}
-            disabled={step === 3}
-          >
-            Next
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-export default TeamBuilder;
+  // Render the football field with players
+  const renderFootballField = () => (
+    <div className="relative w-full h-96 bg-green-600 rounded-lg p-4">
+      {/* Field markings */}
+      <div className="absolute inset-0 border-2 border-white rounded-lg">
+        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white transform -translate-x-1/2" />
+        <div className="absolute top-1/2 left-0 right-0 h-px bg-white transform -translate-y-1/2" />
+        <div
