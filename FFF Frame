@@ -1,140 +1,136 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { User, Users, Football, Trophy } from 'lucide-react';
+// Continue the renderFootballField function
 
-// Constants
-const TALENT_API_KEY = process.env.NEXT_PUBLIC_TALENT_API_KEY || 'API_KEY'; // Use environment variables
-const TALENT_API_URL = 'https://api.talentprotocol.com/v1';
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border-2 border-white"
+        />
+      </div>
 
-const PlayerPosition = {
-  GOALKEEPER: 'GK',
-  CENTER_BACK: 'CB',
-  RIGHT_BACK: 'RB',
-  LEFT_BACK: 'LB',
-  CENTER_MID: 'CM',
-  RIGHT_WING: 'RW',
-  LEFT_WING: 'LW',
-  STRIKER: 'ST'
-};
+      {/* Players on the field */}
+      {selectedPlayers.map((player, index) => {
+        const position = getPlayerPosition(index, formation);
+        return (
+          <div
+            key={player.id}
+            style={{ left: `${position.x}%`, top: `${position.y}%` }}
+            className="absolute transform -translate-x-1/2 -translate-y-1/2"
+          >
+            <img
+              src={player.avatar}
+              alt={`${player.username} avatar`}
+              className="w-10 h-10 rounded-full border-2 border-white"
+            />
+            <span className="block text-xs text-white text-center mt-1">
+              {player.username}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
 
-const PositionLimits = {
-  [PlayerPosition.GOALKEEPER]: 2,
-  [PlayerPosition.CENTER_BACK]: 6,
-  [PlayerPosition.RIGHT_BACK]: 2,
-  [PlayerPosition.LEFT_BACK]: 2,
-  [PlayerPosition.CENTER_MID]: 6,
-  [PlayerPosition.RIGHT_WING]: 2,
-  [PlayerPosition.LEFT_WING]: 2,
-  [PlayerPosition.STRIKER]: 3
-};
+  // Render friend selection
+  const renderFriendSelection = () => (
+    <div className="grid grid-cols-3 gap-4">
+      {friends.map(friend => (
+        <Card key={friend.id}>
+          <CardHeader className="flex flex-col items-center">
+            <img
+              src={friend.avatar}
+              alt={`${friend.username} avatar`}
+              className="w-16 h-16 rounded-full"
+            />
+            <h3 className="text-center">{friend.username}</h3>
+          </CardHeader>
+          <CardContent>
+            <Button
+              onClick={() => addPlayer(friend, PlayerPosition.STRIKER)}
+              className="w-full"
+            >
+              Add as Striker
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
 
-const TeamBuilder = () => {
-  const [friends, setFriends] = useState([]);
-  const [selectedPlayers, setSelectedPlayers] = useState([]);
-  const [formation, setFormation] = useState('4-3-3');
-  const [step, setStep] = useState(1);
+  // Render selected players
+  const renderSelectedPlayers = () => (
+    <div className="grid grid-cols-5 gap-4">
+      {selectedPlayers.map(player => (
+        <Card key={player.id}>
+          <CardHeader className="flex flex-col items-center">
+            <img
+              src={player.avatar}
+              alt={`${player.username} avatar`}
+              className="w-12 h-12 rounded-full"
+            />
+            <h3 className="text-center">{player.username}</h3>
+            <p className="text-sm text-center">Build Score: {player.buildScore.toFixed(2)}</p>
+          </CardHeader>
+          <CardContent>
+            <Button
+              onClick={() => removePlayer(player.id)}
+              variant="destructive"
+              className="w-full"
+            >
+              Remove
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
 
-  // Fetch friends (mock API call)
-  useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        // Replace with actual API call
-        const mockFriends = [
-          { id: 1, username: 'user1', avatar: '/api/placeholder/50/50' },
-          { id: 2, username: 'user2', avatar: '/api/placeholder/50/50' },
-          { id: 3, username: 'user3', avatar: '/api/placeholder/50/50' }
-        ];
-        setFriends(mockFriends);
-      } catch (error) {
-        console.error('Error fetching friends:', error);
-      }
-    };
-
-    fetchFriends();
-  }, []);
-
-  // Fetch Build Score from Talent Protocol
-  const getBuildScore = async (address) => {
-    try {
-      const response = await fetch(`${TALENT_API_URL}/talent-passports/${address}`, {
-        headers: { Authorization: `Bearer ${TALENT_API_KEY}` }
-      });
-      if (!response.ok) throw new Error('Failed to fetch build score');
-      const data = await response.json();
-      return data.build_score || Math.random() * 100; // Fallback for demo
-    } catch (error) {
-      console.error('Error fetching build score:', error);
-      return Math.random() * 100; // Fallback for demo
+  // Render steps
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return (
+          <>
+            <h2 className="text-2xl font-bold mb-4">Select Players</h2>
+            {renderFriendSelection()}
+            <Button onClick={() => setStep(2)} className="mt-4">
+              Next
+            </Button>
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <h2 className="text-2xl font-bold mb-4">Your Team</h2>
+            {renderSelectedPlayers()}
+            <Button onClick={() => setStep(3)} className="mt-4">
+              Build Formation
+            </Button>
+          </>
+        );
+      case 3:
+        return (
+          <>
+            <h2 className="text-2xl font-bold mb-4">Team Formation</h2>
+            <select
+              value={formation}
+              onChange={(e) => setFormation(e.target.value)}
+              className="block w-full mb-4 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="4-3-3">4-3-3</option>
+              <option value="4-4-2">4-4-2</option>
+              <option value="3-5-2">3-5-2</option>
+            </select>
+            {renderFootballField()}
+          </>
+        );
+      default:
+        return null;
     }
   };
 
-  // Add a player to the team
-  const addPlayer = async (friend, position) => {
-    if (selectedPlayers.length >= 20) {
-      alert('Maximum team size reached (20 players)');
-      return;
-    }
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-8">Team Builder</h1>
+      {renderStep()}
+    </div>
+  );
+};
 
-    const buildScore = await getBuildScore(friend.address);
-    setSelectedPlayers((prevPlayers) => [...prevPlayers, { ...friend, position, buildScore }]);
-  };
-
-  // Remove a player from the team
-  const removePlayer = (id) => {
-    setSelectedPlayers((prevPlayers) => prevPlayers.filter((player) => player.id !== id));
-  };
-
-  // Calculate player positions based on formation
-  const getPlayerPosition = (index, formation) => {
-    const positions = {
-      '4-3-3': [
-        { x: 50, y: 90 }, // GK
-        { x: 20, y: 70 }, // LB
-        { x: 40, y: 70 }, // CB
-        { x: 60, y: 70 }, // CB
-        { x: 80, y: 70 }, // RB
-        { x: 30, y: 50 }, // CM
-        { x: 50, y: 50 }, // CM
-        { x: 70, y: 50 }, // CM
-        { x: 20, y: 30 }, // LW
-        { x: 50, y: 20 }, // ST
-        { x: 80, y: 30 }  // RW
-      ],
-      '4-4-2': [
-        { x: 50, y: 90 }, // GK
-        { x: 20, y: 70 }, // LB
-        { x: 40, y: 70 }, // CB
-        { x: 60, y: 70 }, // CB
-        { x: 80, y: 70 }, // RB
-        { x: 20, y: 50 }, // LM
-        { x: 40, y: 50 }, // CM
-        { x: 60, y: 50 }, // CM
-        { x: 80, y: 50 }, // RM
-        { x: 35, y: 30 }, // ST
-        { x: 65, y: 30 }  // ST
-      ],
-      '3-5-2': [
-        { x: 50, y: 90 }, // GK
-        { x: 30, y: 70 }, // CB
-        { x: 50, y: 70 }, // CB
-        { x: 70, y: 70 }, // CB
-        { x: 20, y: 50 }, // LM
-        { x: 40, y: 50 }, // CM
-        { x: 60, y: 50 }, // CM
-        { x: 80, y: 50 }, // RM
-        { x: 35, y: 30 }, // ST
-        { x: 65, y: 30 }  // ST
-      ]
-    };
-    return positions[formation][index] || { x: 50, y: 50 };
-  };
-
-  // Render the football field with players
-  const renderFootballField = () => (
-    <div className="relative w-full h-96 bg-green-600 rounded-lg p-4">
-      {/* Field markings */}
-      <div className="absolute inset-0 border-2 border-white rounded-lg">
-        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white transform -translate-x-1/2" />
-        <div className="absolute top-1/2 left-0 right-0 h-px bg-white transform -translate-y-1/2" />
-        <div
+export default TeamBuilder;
