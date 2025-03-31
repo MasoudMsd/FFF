@@ -4,7 +4,7 @@
 
     <!-- Header -->
     <rect x="0" y="0" width="1200" height="60" fill="#1e293b" />
-    <text x="30" y="38" fill="white" font-family="Arial" font-size="24" font-weight="bold">Farcaster Fantasy Football</text>
+    <text x="30" y="40" fill="white" font-family="Arial" font-size="24" font-weight="bold">Farcaster Fantasy Football</text>
 
     <!-- Main Content Container -->
     <g transform="translate(20, 80)">
@@ -16,12 +16,12 @@
         <g transform="translate(10, 60)">
             <!-- Reusable Player Item Template -->
             <g id="player-template">
-                <rect x="10" y="10" width="320" height="60" fill="#f8fafc" rx="4" />
-                <circle cx="40" cy="40" r="20" fill="#cbd5e1" />
-                <text x="80" y="35" fill="#1e293b" font-family="Arial" font-size="16">@player</text>
-                <text x="80" y="55" fill="#64748b" font-family="Arial" font-size="14">Build Score: 0.0</text>
-                <rect x="240" y="25" width="70" height="30" fill="#2563eb" rx="4" />
-                <text x="255" y="45" fill="white" font-family="Arial" font-size="14">Add</text>
+                <rect x="0" y="0" width="320" height="60" fill="#f8fafc" rx="4" />
+                <circle cx="40" cy="30" r="20" fill="#cbd5e1" />
+                <text x="80" y="25" fill="#1e293b" font-family="Arial" font-size="16">@player</text>
+                <text x="80" y="45" fill="#64748b" font-family="Arial" font-size="14">Build Score: 0.0</text>
+                <rect x="240" y="15" width="70" height="30" fill="#2563eb" rx="4" />
+                <text x="255" y="30" fill="white" font-family="Arial" font-size="14">Add</text>
             </g>
 
             <!-- Render Multiple Players -->
@@ -41,6 +41,8 @@
                 <text x="25" y="25" fill="white" font-family="Arial" font-size="16">4-3-3</text>
                 <rect x="120" y="0" width="100" height="40" fill="#e2e8f0" rx="4" />
                 <text x="145" y="25" fill="#1e293b" font-family="Arial" font-size="16">4-4-2</text>
+                <rect x="240" y="0" width="100" height="40" fill="#e2e8f0" rx="4" />
+                <text x="265" y="25" fill="#1e293b" font-family="Arial" font-size="16">3-5-2</text>
             </g>
 
             <!-- Football Field -->
@@ -93,14 +95,14 @@
 
             <!-- Team Stats -->
             <g transform="translate(20, 640)">
-                <text x="0" y="0" fill="#1e293b" font-family="Arial" font-size="16">Team Build Score: 87.5</text>
-                <text x="200" y="0" fill="#1e293b" font-family="Arial" font-size="16">Players: 11/20</text>
+                <text x="0" y="20" fill="#1e293b" font-family="Arial" font-size="16">Team Build Score: 87.5</text>
+                <text x="200" y="20" fill="#1e293b" font-family="Arial" font-size="16">Players: 11/20</text>
             </g>
         </g>
     </g>
 
     <!-- Footer Actions -->
-    <g transform="translate(20, 780)">
+    <g transform="translate(20, 760)">
         <rect x="0" y="0" width="150" height="40" fill="#2563eb" rx="4" />
         <text x="45" y="25" fill="white" font-family="Arial" font-size="16">Save Team</text>
 
