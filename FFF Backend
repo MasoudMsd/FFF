@@ -1,7 +1,11 @@
 // index.js
-import { createFrames } from '@neynar/nodejs-sdk';
 import express from 'express';
+import { createFrames } from '@neynar/nodejs-sdk';
 import { ethers } from 'ethers';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const frames = createFrames();
@@ -10,9 +14,13 @@ const frames = createFrames();
 const CONTRACT_ABI = [
   "function mintTeamNFT(address to, string[] memory players, uint256[] memory buildScores)"
 ];
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS; // Use environment variables for sensitive data
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const RPC_URL = process.env.RPC_URL;
+
+if (!CONTRACT_ADDRESS || !PRIVATE_KEY || !RPC_URL) {
+  throw new Error('Missing required environment variables');
+}
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -43,10 +51,37 @@ app.get('/api/frame', async (req, res) => {
 
     res.send(frame);
   } catch (error) {
-    console.error('Error creating frame:', error);
+    console.error('Error creating frame:', error.message);
     res.status(500).json({ error: 'Failed to create frame' });
   }
 });
+
+// Helper function for minting NFTs
+async function mintNFT(address, players, buildScores) {
+  try {
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
+
+    // Validate inputs
+    if (!ethers.utils.isAddress(address)) {
+      throw new Error('Invalid Ethereum address');
+    }
+
+    if (players.length !== buildScores.length) {
+      throw new Error('Players and buildScores arrays must have the same length');
+    }
+
+    // Mint the NFT
+    const tx = await contract.mintTeamNFT(address, players, buildScores);
+    await tx.wait(); // Wait for transaction confirmation
+
+    return tx.hash;
+  } catch (error) {
+    console.error('Error minting NFT:', error.message);
+    throw error;
+  }
+}
 
 // Route to mint NFTs
 app.post('/api/mint-team', async (req, res) => {
@@ -58,18 +93,10 @@ app.post('/api/mint-team', async (req, res) => {
   }
 
   try {
-    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-    const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
-
-    // Mint the NFT
-    const tx = await contract.mintTeamNFT(address, players, buildScores);
-    await tx.wait(); // Wait for transaction confirmation
-
-    res.json({ success: true, txHash: tx.hash });
+    const txHash = await mintNFT(address, players, buildScores);
+    res.json({ success: true, txHash });
   } catch (error) {
-    console.error('Error minting NFT:', error);
-    res.status(500).json({ error: 'Failed to mint NFT' });
+    res.status(500).json({ error: error.message || 'Failed to mint NFT' });
   }
 });
 
