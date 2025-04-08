@@ -1,4 +1,4 @@
-// ---------- بخش سرور (Backend) ----------
+// ---------- Server Section (Backend) ----------
 import express from 'express';
 import { ethers } from 'ethers';
 import dotenv from 'dotenv';
@@ -7,13 +7,13 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// تنظیمات بلاکچین
+// Blockchain settings
 const CONTRACT_ABI = ["function mintTeamNFT(address to, string[] memory players, uint256[] memory buildScores)"];
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const RPC_URL = process.env.RPC_URL;
 
-// ---------- بخش رابط کاربری (Frontend) ----------
+// ---------- Frontend Section (User Interface) ----------
 const htmlTemplate = `
 <!DOCTYPE html>
 <html>
@@ -24,7 +24,7 @@ const htmlTemplate = `
 <body class="bg-gray-100">
   <div id="app" class="max-w-4xl mx-auto p-4"></div>
   <script>
-    // ---------- منطق فرانت‌اند ----------
+    // ---------- Frontend Logic ----------
     const selectedPlayers = [];
     const friends = [
       { id: 1, username: '@vitalik', avatar: 'https://i.imgur.com/1.png', buildScore: 94.2 },
@@ -63,7 +63,7 @@ const htmlTemplate = `
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          address: '0xUserAddress', // جایگزین با آدرس واقعی کاربر
+          address: '0xUserAddress', // Replace with the user's actual address
           players: selectedPlayers.map(p => p.username),
           buildScores: selectedPlayers.map(p => p.buildScore)
         })
@@ -78,14 +78,14 @@ const htmlTemplate = `
       render();
     }
 
-    // شروع رندر اولیه
+    // Initial rendering
     render();
   </script>
 </body>
 </html>
 `;
 
-// ---------- مسیرهای سرور ----------
+// ---------- Server Routes ----------
 app.get('/', (req, res) => res.send(htmlTemplate));
 
 app.post('/api/mint-team', async (req, res) => {
@@ -102,7 +102,7 @@ app.post('/api/mint-team', async (req, res) => {
   }
 });
 
-// ---------- اجرای سرور ----------
+// ---------- Run the Server ----------
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(\`Server running on http://localhost:\${PORT}\`);
