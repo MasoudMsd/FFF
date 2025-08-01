@@ -1,4 +1,22 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="1200" height="800" fill="#f8fafc" />
 
+    <!-- Header -->
+    <rect x="0" y="0" width="1200" height="60" fill="#1e293b" />
+    <text x="30" y="40" fill="white" font-family="Arial" font-size="24" font-weight="bold">Farcaster Fantasy Football</text>
+
+    <!-- Main Content Container -->
+    <g transform="translate(20, 80)">
+        <!-- Left Panel - Team Selection -->
+        <rect x="0" y="0" width="350" height="680" fill="white" stroke="#e2e8f0" stroke-width="2" rx="8" />
+        <text x="20" y="40" fill="#1e293b" font-family="Arial" font-size="20" font-weight="bold">Select Players</text>
+
+        <!-- Player List -->
+        <g transform="translate(10, 60)">
+            <!-- Reusable Player Item Template -->
+            <g id="player-template">
+                <rect x="0" y="0" width="320" height="60" fill="#f8fafc" rx="4" />
                 <circle cx="40" cy="30" r="20" fill="#cbd5e1" />
                 <text x="80" y="25" fill="#1e293b" font-family="Arial" font-size="16">@player</text>
                 <text x="80" y="45" fill="#64748b" font-family="Arial" font-size="14">Build Score: 0.0</text>
