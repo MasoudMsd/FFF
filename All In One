@@ -1,4 +1,13 @@
+// ---------- Server Section (Backend) ----------
+import express from 'express';
+import { ethers } from 'ethers';
+import dotenv from 'dotenv';
 
+dotenv.config();
+const app = express();
+app.use(express.json());
+
+// Blockchain settings
 const CONTRACT_ABI = ["function mintTeamNFT(address to, string[] memory players, uint256[] memory buildScores)"];
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
