@@ -1,22 +1,4 @@
-// index.js
-import express from 'express';
-import { createFrames } from '@neynar/nodejs-sdk';
-import { ethers } from 'ethers';
-import dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config();
-
-const app = express();
-const frames = createFrames();
-
-// Environment variables
-const CONTRACT_ABI = [
-  "function mintTeamNFT(address to, string[] memory players, uint256[] memory buildScores)"
-];
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const RPC_URL = process.env.RPC_URL;
 
 if (!CONTRACT_ADDRESS || !PRIVATE_KEY || !RPC_URL) {
   throw new Error('Missing required environment variables');
