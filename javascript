@@ -1,5 +1,4 @@
-async function mintTeam() {
-  const response = await fetch('/api/mint-team', {
+
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
